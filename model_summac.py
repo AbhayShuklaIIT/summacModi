@@ -121,7 +121,7 @@ class SummaCImager:
             self.load_nli()
 
         dataset = [{"premise": original_chunks[i], "hypothesis": generated_chunks[j], "doc_i": i, "gen_i": j} for i in range(N_ori) for j in range(N_gen)]
-        for batch in utils_misc.batcher(dataset, batch_size=256):
+        for batch in utils_misc.batcher(dataset, batch_size=512):
 
             if self.model_name == "decomp":
                 batch_evids, batch_conts, batch_neuts = [], [], []
