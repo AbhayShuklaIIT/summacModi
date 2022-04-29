@@ -28,7 +28,7 @@ def get_neutral_idx(ent_idx, con_idx):
     return list(set([0, 1, 2]) - set([ent_idx, con_idx]))[0]
 
 class SummaCImager:
-    def __init__(self, model_name="mnli", granularity="paragraph", use_cache=True, max_doc_sents=100, **kwargs):
+    def __init__(self, model_name="mnli", granularity="paragraph", use_cache=True, max_doc_sents=1000, **kwargs):
 
         self.grans = granularity.split("-")
 
@@ -121,7 +121,7 @@ class SummaCImager:
             self.load_nli()
 
         dataset = [{"premise": original_chunks[i], "hypothesis": generated_chunks[j], "doc_i": i, "gen_i": j} for i in range(N_ori) for j in range(N_gen)]
-        for batch in utils_misc.batcher(dataset, batch_size=20):
+        for batch in utils_misc.batcher(dataset, batch_size=256):
 
             if self.model_name == "decomp":
                 batch_evids, batch_conts, batch_neuts = [], [], []
@@ -300,7 +300,7 @@ class SummaCConv(torch.nn.Module):
 
 
 class SummaCZS:
-    def __init__(self, model_name="mnli", granularity="paragraph", op1="max", op2="mean", use_ent=True, use_con=True, imager_load_cache=True, **kwargs):
+    def __init__(self, model_name="mnli", granularity="paragraph", op1="max", op2="mean", use_ent=True, use_con=False, imager_load_cache=True, **kwargs):
         assert op2 in ["min", "mean", "max"], "Unrecognized `op2`"
         assert op1 in ["max", "mean", "min"], "Unrecognized `op1`"
 
